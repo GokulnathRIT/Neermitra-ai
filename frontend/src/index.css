@@ -1,0 +1,131 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@theme {
+  --color-brand-blue:       #0F172A;
+  --color-brand-midblue:    #1E3A8A;
+  --color-brand-lightblue:  #3B82F6;
+  --color-brand-green:      #10B981;
+  --color-brand-lightgreen: #34D399;
+  --color-brand-teal:       #0D9488;
+  --color-brand-glass:      rgba(255, 255, 255, 0.07);
+  --color-brand-glassborder: rgba(255, 255, 255, 0.15);
+}
+
+/* ── Base ─────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #0F172A;
+  color: white;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Background Mesh Gradient ─────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(59,130,246,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(16,185,129,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(13,148,136,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* All content above the background */
+#root { position: relative; z-index: 1; }
+
+/* ── Glass Card ───────────────────────────────────────── */
+@utility glass-card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 1.25rem;
+}
+
+/* ── Glass Card Strong ────────────────────────────────── */
+@utility glass-strong {
+  background: rgba(255,255,255,0.09);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 1.5rem;
+}
+
+/* ── Gradient Text ────────────────────────────────────── */
+@utility gradient-text {
+  background: linear-gradient(135deg, #60A5FA 0%, #34D399 60%, #A78BFA 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Glow Button ──────────────────────────────────────── */
+@utility btn-glow {
+  background: linear-gradient(135deg, #3B82F6, #10B981);
+  border: none;
+  border-radius: 0.875rem;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 24px rgba(59,130,246,0.35);
+}
+
+@utility btn-glow-hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px rgba(59,130,246,0.55);
+}
+
+/* ── Neon Border ──────────────────────────────────────── */
+@utility neon-border {
+  border: 1px solid rgba(52,211,153,0.4);
+  box-shadow: 0 0 20px rgba(52,211,153,0.15), inset 0 0 20px rgba(52,211,153,0.03);
+}
+
+/* ── Card Hover ───────────────────────────────────────── */
+@utility card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ── Scrollbar ────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0F172A; }
+::-webkit-scrollbar-thumb { background: rgba(59,130,246,0.4); border-radius: 3px; }
+
+/* ── Animations ───────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(52,211,153,0.3); }
+  50%       { box-shadow: 0 0 40px rgba(52,211,153,0.6); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-float       { animation: float 4s ease-in-out infinite; }
+.animate-pulse-glow  { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-slide-up    { animation: slide-up 0.6s ease forwards; }
+
+.shimmer-text {
+  background: linear-gradient(90deg, #60A5FA, #34D399, #A78BFA, #60A5FA);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
