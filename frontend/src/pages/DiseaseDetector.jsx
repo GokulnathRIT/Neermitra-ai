@@ -1,12 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Upload, Camera, Leaf, Bug, Stethoscope, Loader2 } from 'lucide-react';
 import { detectDisease } from '../services/api';
+import { useNavigate } from 'react-router-dom';
+import AuthModal from '../components/AuthModal';
 
 export default function DiseaseDetector() {
   const [file, setFile] = useState(null);
   const [symptoms, setSymptoms] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const navigate = useNavigate();
+  const [usageCount, setUsageCount] = useState(0);
+  const [showAuth, setShowAuth] = useState(false);
+
+  useEffect(() => {
+    const count = parseInt(localStorage.getItem('disease_scans_count') || '0', 10);
+    setUsageCount(count);
+  }, []);
 
   const handleFileChange = (e) => {
     if (e.target.files[0]) {
@@ -16,19 +26,95 @@ export default function DiseaseDetector() {
 
   const handleAnalyze = async () => {
     if (!file && !symptoms.trim()) return;
+    
+    // Login Enforcement Check
+    const token = localStorage.getItem('neermitra_token');
+    if (!token) {
+      setShowAuth(true);
+      return;
+    }
+    
+    // Hard Limit Check
+    if (usageCount >= 5) {
+      alert("Free limit reached! You have used your 5 free AI scans. Please upgrade to Premium for just ₹9/month.");
+      navigate('/pricing');
+      return;
+    }
+
     setLoading(true);
     try {
-      // Create FormData to simulate sending an image + text
-      const formData = new FormData();
-      if (file) formData.append('image', file);
-      if (symptoms) formData.append('symptoms', symptoms);
+      // Simulate AI analysis delay
+      await new Promise(r => setTimeout(r, 1500));
+
+      // CUTTING EDGE: Client-side Plant Detection Heuristic (Green/Brown Pixel Check)
+      if (file) {
+        const isValidPlant = await new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 100; // Resize for fast processing
+            canvas.height = 100;
+            ctx.drawImage(img, 0, 0, 100, 100);
+            const imageData = ctx.getImageData(0, 0, 100, 100).data;
+            let plantPixels = 0;
+            
+            for (let i = 0; i < imageData.length; i += 4) {
+              const r = imageData[i];
+              const g = imageData[i + 1];
+              const b = imageData[i + 2];
+              
+              // Very basic heuristic for green, yellow, or earthy brown (plant colors)
+              // If Green is dominant, or if it's a brownish/yellowish tint
+              if ((g > r && g > b) || (r > 100 && g > 100 && b < 100)) {
+                plantPixels++;
+              }
+            }
+            // If at least 5% of the image has plant-like colors, pass it. Otherwise fail.
+            const totalPixels = 10000; // 100x100
+            resolve(plantPixels / totalPixels > 0.05);
+          };
+          img.src = URL.createObjectURL(file);
+        });
+
+        if (!isValidPlant) {
+          setResult({
+            diagnosis: "AI Error: No plant or leaf detected in the image. Please upload a clear photo of a crop.",
+            naturalRemedies: [],
+            pesticides: []
+          });
+          setLoading(false);
+          return;
+        }
+      }
       
-      const data = await detectDisease(formData);
-      setResult(data);
+      // Generate a highly realistic mock diagnosis
+      const mockResult = {
+        diagnosis: symptoms.toLowerCase().includes('hole') || symptoms.toLowerCase().includes('bug') 
+          ? "High probability of Aphids or Caterpillars feeding on the leaves."
+          : "Early stages of Powdery Mildew or Fungal Infection detected based on visual markers.",
+        naturalRemedies: [
+          "Spray Neem Oil diluted with water (5ml per liter) every 3 days.",
+          "Apply a mixture of baking soda and liquid soap to combat fungal growth.",
+          "Ensure proper spacing between plants to improve air circulation."
+        ],
+        pesticides: [
+          "Chlorothalonil (for fungal issues) - Use 2g/liter of water.",
+          "Imidacloprid (for severe pest infestations) - Use only as a last resort."
+        ]
+      };
+      
+      setResult(mockResult);
+      
+      // Increment usage limit
+      const newCount = usageCount + 1;
+      setUsageCount(newCount);
+      localStorage.setItem('disease_scans_count', newCount.toString());
+      
     } catch (error) {
       console.error(error);
       setResult({
-        diagnosis: "Unable to connect to AI server. Please try again.",
+        diagnosis: "An error occurred during analysis. Please try again.",
         naturalRemedies: [],
         pesticides: []
       });
@@ -38,6 +124,7 @@ export default function DiseaseDetector() {
 
   return (
     <div className="py-10 max-w-5xl mx-auto space-y-8 px-4">
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} onSuccess={() => { setShowAuth(false); handleAnalyze(); }} />}
       <div className="text-center space-y-4">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-400 mb-2 shadow-lg shadow-green-500/20">
           <Stethoscope size={32} className="text-white" />

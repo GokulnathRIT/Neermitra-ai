@@ -1,6 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middlewares/auth');
+const { GoogleGenAI } = require('@google/genai');
+
+// Initialize Gemini conditionally
+let ai;
+if (process.env.GEMINI_API_KEY) {
+  ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+}
 
 // ─────────────────────────────────────────────────────────────
 // Software-simulated water data (replaces IoT sensors)
@@ -44,11 +51,65 @@ const CROP_DB = {
 };
 
 // @route   POST /api/crops/recommend
-router.post('/recommend', auth, (req, res) => {
+router.post('/recommend', async (req, res) => {
   const { landSizeAcres, soilType, waterAvailability, season } = req.body;
   if (!landSizeAcres || !soilType || !waterAvailability || !season) {
     return res.status(400).json({ error: 'All fields required: landSizeAcres, soilType, waterAvailability, season' });
   }
+
+  // Try real Gemini API first
+  if (ai) {
+    try {
+      const prompt = `You are an expert Indian Agronomist. Recommend the most profitable crop for the following conditions in India:
+Land Size: ${landSizeAcres} acres
+Soil Type: ${soilType}
+Water Availability: ${waterAvailability}
+Season: ${season}
+
+Respond ONLY with a raw JSON object in the following exact format (no markdown, no backticks, no extra text):
+{
+  "primaryCrop": "Name of best crop",
+  "alternativeCrops": ["Alt 1", "Alt 2"],
+  "waterRequired": "Low/Medium/High",
+  "estimatedProfitPerAcre": "₹X,000/acre",
+  "estimatedTotalProfit": "₹Total",
+  "reasoning": "Brief 1-sentence scientific reason."
+}`;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-1.5-flash',
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          temperature: 0.2
+        }
+      });
+
+      const responseText = response.text;
+      
+      // Attempt to parse the JSON
+      let resultData;
+      try {
+        resultData = JSON.parse(responseText.replace(/```json/g, '').replace(/```/g, ''));
+      } catch (parseErr) {
+        console.warn("Gemini response was not valid JSON, falling back.", responseText);
+        throw parseErr;
+      }
+
+      return res.json({
+        recommendationId: `rec_${Date.now()}`,
+        inputs: { landSizeAcres, soilType, waterAvailability, season },
+        recommendation: resultData,
+        createdAt: new Date(),
+      });
+
+    } catch (err) {
+      console.warn("⚠️ Real Gemini call failed for Crop Planner. Falling back to CROP_DB.", err.message);
+      // Fall through to CROP_DB below
+    }
+  }
+
+  // Fallback to static DB
   const soilData   = CROP_DB[soilType]          || CROP_DB['loamy'];
   const waterData  = soilData[waterAvailability] || soilData['medium'];
   const seasonData = waterData[season]           || waterData['kharif'];
@@ -98,14 +159,69 @@ router.get('/water-health', (req, res) => {
 });
 
 // @route   POST /api/crops/detect-disease
-// Simulates AI disease detection from image/text
-router.post('/detect-disease', (req, res) => {
-  // In a real app with Vertex AI or GPT-4 Vision, we would process req.file and req.body.symptoms
-  // For the presentation (to avoid quota issues), we use a smart mock system.
-  
-  // Simulate network delay for realism
-  setTimeout(() => {
-    res.json({
+router.post('/detect-disease', async (req, res) => {
+  const { imageBase64, symptoms } = req.body;
+
+  if (ai) {
+    try {
+      const prompt = `You are an expert plant pathologist. Analyze the provided image (if any) and symptoms (if any).
+1. CRITICAL: Is this image related to agriculture, farming, plants, leaves, or crops? If it is a picture of an event, a person, a random object, or anything non-agricultural, you MUST reject it by responding EXACTLY with this diagnosis: "Please upload a valid photo of a plant, crop, or leaf." and empty arrays for remedies.
+2. If it IS a plant, identify the disease or pest issue.
+
+Return ONLY a raw JSON object in the following exact format (no markdown, no backticks):
+{
+  "diagnosis": "Detailed explanation of what disease it is, OR the rejection message",
+  "naturalRemedies": ["remedy 1", "remedy 2"],
+  "pesticides": ["chemical 1", "chemical 2"]
+}
+Symptoms described by user: ${symptoms || 'None'}`;
+
+      const contents = [{ role: 'user', parts: [{ text: prompt }] }];
+
+      if (imageBase64) {
+        // extract mime type and base64 data from data URL
+        const matches = imageBase64.match(/^data:(.*?);base64,(.+)$/);
+        if (matches && matches.length === 3) {
+          contents[0].parts.push({
+            inlineData: {
+              mimeType: matches[1],
+              data: matches[2]
+            }
+          });
+        }
+      }
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents,
+        config: {
+          responseMimeType: "application/json",
+          temperature: 0.2
+        }
+      });
+
+      const responseText = response.text;
+      let resultData;
+      try {
+        resultData = JSON.parse(responseText.replace(/```json/g, '').replace(/```/g, ''));
+      } catch (e) {
+        console.warn("Vision response not JSON", responseText);
+        throw e;
+      }
+      return res.json(resultData);
+
+    } catch (err) {
+      console.error("⚠️ Real Gemini Vision call failed.", err);
+      return res.status(200).json({ 
+        diagnosis: `Error: ${err.message}`, 
+        naturalRemedies: [], 
+        pesticides: [] 
+      });
+    }
+  }
+
+  // Fallback if no AI
+  return res.json({
       diagnosis: "Detected early-stage Early Blight (Alternaria solani) or common fungal infection. The yellowing spots and holes are typical signs of this pathogen spreading during humid weather.",
       naturalRemedies: [
         "Prune and destroy infected leaves immediately to prevent spreading.",
@@ -119,7 +235,6 @@ router.post('/detect-disease', (req, res) => {
         "Caution: Stop spraying 14 days before harvest."
       ]
     });
-  }, 2500); // 2.5 second delay to look like AI processing
 });
 
 module.exports = router;

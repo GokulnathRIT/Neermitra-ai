@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const auth = require('../middlewares/auth');
+const User = require('../models/User');
 
 // Initialize Razorpay only if keys exist
 let razorpay = null;
@@ -81,9 +82,9 @@ router.post('/create-order', auth, async (req, res) => {
     const order = await razorpay.orders.create({
       amount:   plan.amount,
       currency: plan.currency,
-      receipt:  `receipt_${req.user.uid}_${Date.now()}`,
+      receipt:  `rcpt_${Date.now()}`,
       notes: {
-        userId:  req.user.uid,
+        userId:  req.user.id,
         email:   req.user.email,
         plan:    planId,
       },
@@ -107,7 +108,7 @@ router.post('/create-order', auth, async (req, res) => {
 // @desc    Verify payment signature from Razorpay webhook
 // @access  Private (auth required)
 // ─────────────────────────────────────────────────
-router.post('/verify', auth, (req, res) => {
+router.post('/verify', auth, async (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, planId } = req.body;
 
   // MOCK MODE
@@ -117,7 +118,7 @@ router.post('/verify', auth, (req, res) => {
       mock:         true,
       message:      'Mock payment verified successfully! Add real Razorpay keys to process live payments.',
       subscription: planId,
-      userId:       req.user.uid,
+      userId:       req.user.id,
     });
   }
 
@@ -133,8 +134,8 @@ router.post('/verify', auth, (req, res) => {
       return res.status(400).json({ error: 'Payment signature mismatch. Possible fraud.' });
     }
 
-    // ✅ Payment is genuine — update user subscription in DB here
-    // await db.collection('users').doc(req.user.uid).update({ subscription: planId });
+    // ✅ Payment is genuine — update user subscription in DB
+    await User.findByIdAndUpdate(req.user.id, { plan: planId });
 
     res.json({
       success:      true,

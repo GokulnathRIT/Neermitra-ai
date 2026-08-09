@@ -6,8 +6,14 @@ const resources = {
     translation: {
       // Navbar
       home: 'Home', advisor: 'AI Advisor', dashboard: 'Dashboard',
-      planner: 'Crop Planner', community: 'Community', schemes: 'Schemes',
+      planner: 'Crop Planner', doctor: 'Crop Doctor', community: 'Community', schemes: 'Schemes',
       impact: 'Impact', pricing: 'Pricing', upgrade: 'Upgrade',
+      corporate: 'Corporate B2B',
+      // B2B
+      b2b_title: 'Enterprise Agri-Data Portal',
+      b2b_desc: 'Access real-time crop yields, disease heatmaps, and direct farmer procurement data.',
+      unlock_data: 'Unlock Enterprise Data',
+      house_farming: 'House Farming Guide',
       // Home
       hero_line1: 'Predict Water.',
       hero_line2: 'Protect Communities.',
@@ -75,8 +81,13 @@ const resources = {
   hi: {
     translation: {
       home: 'होम', advisor: 'AI सलाहकार', dashboard: 'डैशबोर्ड',
-      planner: 'फसल योजनाकार', community: 'समुदाय', schemes: 'योजनाएं',
+      planner: 'फसल योजनाकार', doctor: 'फसल डॉक्टर', community: 'समुदाय', schemes: 'योजनाएं',
       impact: 'प्रभाव', pricing: 'मूल्य', upgrade: 'अपग्रेड करें',
+      corporate: 'कॉर्पोरेट B2B',
+      b2b_title: 'एंटरप्राइज कृषि-डेटा पोर्टल',
+      b2b_desc: 'वास्तविक समय फसल उपज, रोग हीटमैप और प्रत्यक्ष किसान खरीद डेटा तक पहुंचें।',
+      unlock_data: 'एंटरप्राइज डेटा अनलॉक करें',
+      house_farming: 'हाउस फार्मिंग गाइड',
       hero_line1: 'पानी की भविष्यवाणी करें।',
       hero_line2: 'समुदायों की रक्षा करें।',
       hero_line3: 'किसानों को सशक्त बनाएं।',
@@ -136,8 +147,13 @@ const resources = {
   te: {
     translation: {
       home: 'హోమ్', advisor: 'AI సలహాదారు', dashboard: 'డాష్‌బోర్డ్',
-      planner: 'పంట ప్లానర్', community: 'కమ్యూనిటీ', schemes: 'పథకాలు',
+      planner: 'పంట ప్లానర్', doctor: 'పంట డాక్టర్', community: 'కమ్యూనిటీ', schemes: 'పథకాలు',
       impact: 'ప్రభావం', pricing: 'ధర', upgrade: 'అప్‌గ్రేడ్',
+      corporate: 'కార్పొరేట్ B2B',
+      b2b_title: 'ఎంటర్‌ప్రైజ్ అగ్రి-డేటా పోర్టల్',
+      b2b_desc: 'రియల్ టైమ్ పంట దిగుబడి, వ్యాధి హీట్‌మ్యాప్‌లు మరియు ప్రత్యక్ష రైతు సేకరణ డేటాను యాక్సెస్ చేయండి.',
+      unlock_data: 'ఎంటర్‌ప్రైజ్ డేటాను అన్‌లాక్ చేయండి',
+      house_farming: 'ఇంటి వ్యవసాయ మార్గదర్శి',
       hero_line1: 'నీటిని అంచనా వేయండి.',
       hero_line2: 'సమాజాలను రక్షించండి.',
       hero_line3: 'రైతులను శక్తివంతం చేయండి.',
@@ -182,8 +198,13 @@ const resources = {
   ta: {
     translation: {
       home: 'முகப்பு', advisor: 'AI ஆலோசகர்', dashboard: 'டாஷ்போர்டு',
-      planner: 'பயிர் திட்டமிடல்', community: 'சமூகம்', schemes: 'திட்டங்கள்',
+      planner: 'பயிர் திட்டமிடல்', doctor: 'பயிர் மருத்துவர்', community: 'சமூகம்', schemes: 'திட்டங்கள்',
       impact: 'தாக்கம்', pricing: 'விலை', upgrade: 'மேம்படுத்து',
+      corporate: 'நிறுவன B2B',
+      b2b_title: 'நிறுவன வேளாண் தரவு தளம்',
+      b2b_desc: 'நிகழ்நேர பயிர் மகசூல், நோய் வெப்ப வரைபடங்கள் மற்றும் நேரடி விவசாயி கொள்முதல் தரவை அணுகவும்.',
+      unlock_data: 'நிறுவன தரவை திறக்க',
+      house_farming: 'வீட்டு விவசாய வழிகாட்டி',
       hero_line1: 'தண்ணீரை கணிக்கவும்.',
       hero_line2: 'சமூகங்களை பாதுகாக்கவும்.',
       hero_line3: 'விவசாயிகளை வலிமைப்படுத்தவும்.',
@@ -226,8 +247,13 @@ const resources = {
   mr: {
     translation: {
       home: 'मुख्यपृष्ठ', advisor: 'AI सल्लागार', dashboard: 'डॅशबोर्ड',
-      planner: 'पीक नियोजक', community: 'समुदाय', schemes: 'योजना',
+      planner: 'पीक नियोजक', doctor: 'पीक डॉक्टर', community: 'समुदाय', schemes: 'योजना',
       impact: 'प्रभाव', pricing: 'किंमत', upgrade: 'अपग्रेड करा',
+      corporate: 'कॉर्पोरेट B2B',
+      b2b_title: 'एंटरप्राइझ कृषी-डेटा पोर्टल',
+      b2b_desc: 'रिअल-टाइम पीक उत्पन्न, रोग हीटमॅप आणि थेट शेतकरी खरेदी डेटा प्रवेश करा.',
+      unlock_data: 'एंटरप्राइझ डेटा अनलॉक करा',
+      house_farming: 'घरगुती शेती मार्गदर्शक',
       hero_line1: 'पाण्याचे भाकीत करा.',
       hero_line2: 'समुदायांचे रक्षण करा.',
       hero_line3: 'शेतकऱ्यांना सक्षम करा.',
@@ -269,8 +295,13 @@ const resources = {
   kn: {
     translation: {
       home: 'ಮುಖಪುಟ', advisor: 'AI ಸಲಹೆಗಾರ', dashboard: 'ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',
-      planner: 'ಬೆಳೆ ಯೋಜನೆ', community: 'ಸಮುದಾಯ', schemes: 'ಯೋಜನೆಗಳು',
+      planner: 'ಬೆಳೆ ಯೋಜನೆ', doctor: 'ಬೆಳೆ ವೈದ್ಯ', community: 'ಸಮುದಾಯ', schemes: 'ಯೋಜನೆಗಳು',
       impact: 'ಪ್ರಭಾವ', pricing: 'ಬೆಲೆ', upgrade: 'ಅಪ್‌ಗ್ರೇಡ್',
+      corporate: 'ಕಾರ್ಪೊರೇಟ್ B2B',
+      b2b_title: 'ಎಂಟರ್‌ಪ್ರೈಸ್ ಕೃಷಿ-ಡೇಟಾ ಪೋರ್ಟಲ್',
+      b2b_desc: 'ನೈಜ-ಸಮಯದ ಬೆಳೆ ಇಳುವರಿ, ರೋಗ ಹೀಟ್‌ಮ್ಯಾಪ್‌ಗಳು ಮತ್ತು ನೇರ ರೈತ ಸಂಗ್ರಹಣೆ ಡೇಟಾವನ್ನು ಪ್ರವೇಶಿಸಿ.',
+      unlock_data: 'ಎಂಟರ್‌ಪ್ರೈಸ್ ಡೇಟಾ ಅನ್ಲಾಕ್ ಮಾಡಿ',
+      house_farming: 'ಮನೆ ಕೃಷಿ ಮಾರ್ಗದರ್ಶಿ',
       hero_line1: 'ನೀರನ್ನು ಮುನ್ಸೂಚಿಸಿ.',
       hero_line2: 'ಸಮುದಾಯಗಳನ್ನು ರಕ್ಷಿಸಿ.',
       hero_line3: 'ರೈತರನ್ನು ಸಬಲಗೊಳಿಸಿ.',
@@ -312,8 +343,13 @@ const resources = {
   gu: {
     translation: {
       home: 'હોમ', advisor: 'AI સલાહકાર', dashboard: 'ડેશબોર્ડ',
-      planner: 'પાક આયોજક', community: 'સમુદાય', schemes: 'યોજનાઓ',
+      planner: 'પાક આયોજક', doctor: 'પાક ડૉક્ટર', community: 'સમુદાય', schemes: 'યોજનાઓ',
       impact: 'અસર', pricing: 'કિંમત', upgrade: 'અપગ્રેડ',
+      corporate: 'કોર્પોરેટ B2B',
+      b2b_title: 'એન્ટરપ્રાઇઝ એગ્રી-ડેટા પોર્ટલ',
+      b2b_desc: 'રીઅલ-ટાઇમ પાકની ઉપજ, રોગ હીટમેપ્સ અને સીધી ખેડૂત ખરીદી ડેટાને ઍક્સેસ કરો.',
+      unlock_data: 'એન્ટરપ્રાઇઝ ડેટા અનલૉક કરો',
+      house_farming: 'ઘર ખેતી માર્ગદર્શિકા',
       hero_line1: 'પાણીની આગાહી કરો.',
       hero_line2: 'સમુદાયોનું રક્ષણ કરો.',
       hero_line3: 'ખેડૂતોને સશક્ત બનાવો.',

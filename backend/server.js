@@ -1,22 +1,29 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
-
-dotenv.config();
+const mongoose = require('mongoose');
+const authRoutes = require('./src/routes/auth');
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors());
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('✅ Connected to MongoDB Atlas'))
+  .catch(err => console.error('❌ MongoDB Connection Error:', err));
+
 // NOTE: webhook route needs raw body — must be before express.json()
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // =====================
 // Routes
 // =====================
-app.use('/api/auth',    require('./src/routes/auth'));
+app.use('/api/auth',    authRoutes);
+app.use('/api/journal', require('./src/routes/journal'));
 app.use('/api/advisor', require('./src/routes/api'));
 app.use('/api/reports', require('./src/routes/reports'));
 app.use('/api/crops',   require('./src/routes/crops'));

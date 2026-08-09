@@ -46,6 +46,13 @@ export const loginUser = (payload) =>
 export const getProfile = () =>
   fetchWithCache(`${BASE_URL}/api/auth/me`, { headers: getHeaders() });
 
+// ─── Journal APIs ─────────────────────────────────────────────
+export const getJournals = () =>
+  fetchWithCache(`${BASE_URL}/api/journal`, { headers: getHeaders() });
+
+export const saveJournal = (payload) =>
+  fetchWithCache(`${BASE_URL}/api/journal`, { method: 'POST', headers: getHeaders(), body: JSON.stringify(payload) });
+
 // ─── AI Advisor API ──────────────────────────────────────────
 export const askAdvisor = (query) =>
   fetchWithCache(`${BASE_URL}/api/advisor`, { method: 'POST', headers: getHeaders(), body: JSON.stringify({ query }) });
@@ -70,10 +77,9 @@ export const getWaterHealth = () =>
   fetchWithCache(`${BASE_URL}/api/crops/water-health`, { headers: getHeaders() });
 
 export const detectDisease = (payload) => {
-  // Since it's FormData, we don't stringify and don't set Content-Type header (browser sets boundary automatically)
-  const token = localStorage.getItem('neermitra_token');
-  const headers = token ? { Authorization: `Bearer ${token}` } : {};
-  return fetchWithCache(`${BASE_URL}/api/crops/detect-disease`, { method: 'POST', headers, body: payload });
+  const headers = getHeaders();
+  headers['Content-Type'] = 'application/json';
+  return fetchWithCache(`${BASE_URL}/api/crops/detect-disease`, { method: 'POST', headers, body: JSON.stringify(payload) });
 };
 
 // ─── Government Schemes APIs ─────────────────────────────────

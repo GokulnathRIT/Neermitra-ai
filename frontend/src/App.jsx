@@ -11,6 +11,8 @@ import Pricing from './pages/Pricing';
 import DiseaseDetector from './pages/DiseaseDetector';
 import Journal from './pages/Journal';
 import Lessons from './pages/Lessons';
+import B2BPortal from './pages/B2BPortal';
+import HouseFarming from './pages/HouseFarming';
 
 export default function App() {
   return (
@@ -30,6 +32,8 @@ export default function App() {
             <Route path="/pricing"   element={<Pricing />}    />
             <Route path="/journal"   element={<Journal />}    />
             <Route path="/lessons"   element={<Lessons />}    />
+            <Route path="/b2b"       element={<B2BPortal />}  />
+            <Route path="/house-farming" element={<HouseFarming />} />
           </Routes>
         </main>
 

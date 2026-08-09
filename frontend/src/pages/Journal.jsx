@@ -1,30 +1,70 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Book, Droplets, Leaf, Save, Plus } from 'lucide-react';
+import { Book, Droplets, Leaf, Save, Plus, Loader2 } from 'lucide-react';
+import { getJournals, saveJournal } from '../services/api';
+import AuthModal from '../components/AuthModal';
 
 export default function Journal() {
   const { t } = useTranslation();
-  const [entries, setEntries] = useState([
-    { id: 1, date: '2023-10-15', water: '150L', cropHealth: 'Good', notes: 'Used drip irrigation for 2 hours today. Soil moisture is perfect.' }
-  ]);
+  const [entries, setEntries] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [newEntry, setNewEntry] = useState({ water: '', cropHealth: 'Good', notes: '' });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
 
-  const handleSave = () => {
+  const fetchEntries = async () => {
+    const token = localStorage.getItem('neermitra_token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    try {
+      const data = await getJournals();
+      setEntries(data || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEntries();
+  }, []);
+
+  const handleNewEntryClick = () => {
+    if (!localStorage.getItem('neermitra_token')) {
+      setShowAuth(true);
+      return;
+    }
+    setShowForm(!showForm);
+  };
+
+  const handleSave = async () => {
     if (!newEntry.water || !newEntry.notes) return;
-    setEntries([{ id: Date.now(), date: new Date().toISOString().split('T')[0], ...newEntry }, ...entries]);
-    setNewEntry({ water: '', cropHealth: 'Good', notes: '' });
-    setShowForm(false);
+    setSaving(true);
+    try {
+      const saved = await saveJournal(newEntry);
+      setEntries([saved, ...entries]);
+      setNewEntry({ water: '', cropHealth: 'Good', notes: '' });
+      setShowForm(false);
+    } catch (err) {
+      alert(err.message || 'Failed to save log');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
     <div className="py-10 max-w-4xl mx-auto px-4">
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} onSuccess={() => { setShowAuth(false); fetchEntries(); setShowForm(true); }} />}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-4xl font-bold font-['Space_Grotesk'] flex items-center gap-3">
           <Book className="text-blue-400" size={36} /> Farmer's Journal
         </h1>
         <button 
-          onClick={() => setShowForm(!showForm)}
+          onClick={handleNewEntryClick}
           className="bg-green-500 hover:bg-green-600 text-blue-900 font-bold py-2 px-4 rounded-full flex items-center gap-2 transition-colors"
         >
           <Plus size={20} /> New Entry
@@ -83,27 +123,38 @@ export default function Journal() {
           <div className="flex justify-end">
             <button 
               onClick={handleSave}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg flex items-center gap-2 transition-colors"
+              disabled={saving}
+              className="bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-lg flex items-center gap-2 transition-colors"
             >
-              <Save size={20} /> Save Log
+              {saving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />} 
+              {saving ? 'Saving...' : 'Save Log'}
             </button>
           </div>
         </div>
       )}
 
       <div className="space-y-4">
-        {entries.map(entry => (
-          <div key={entry.id} className="glass-card p-6 border-l-4 border-green-500 hover:bg-white/5 transition-colors">
-            <div className="flex justify-between items-start mb-4">
-              <div className="font-bold text-xl text-yellow-400">{entry.date}</div>
-              <div className="flex gap-4">
-                <span className="flex items-center gap-1 text-cyan-300 bg-cyan-900/30 px-3 py-1 rounded-full text-sm"><Droplets size={14}/> {entry.water}</span>
-                <span className="flex items-center gap-1 text-green-300 bg-green-900/30 px-3 py-1 rounded-full text-sm"><Leaf size={14}/> {entry.cropHealth}</span>
-              </div>
-            </div>
-            <p className="text-gray-300">{entry.notes}</p>
+        {loading ? (
+          <div className="text-center py-10"><Loader2 className="animate-spin mx-auto text-blue-400" size={32} /></div>
+        ) : entries.length === 0 ? (
+          <div className="text-center py-10 text-gray-400">
+            {localStorage.getItem('neermitra_token') ? 'No journal entries yet. Create one!' : 'Please login to view and create journal entries.'}
           </div>
-        ))}
+        ) : (
+          entries.map(entry => (
+            <div key={entry._id} className="glass-card p-6 border-l-4 border-green-500 hover:bg-white/5 transition-colors relative">
+              <div className="absolute top-2 right-4 text-xs text-red-400/50">Auto-deletes in 24h</div>
+              <div className="flex justify-between items-start mb-4">
+                <div className="font-bold text-xl text-yellow-400">{new Date(entry.createdAt).toLocaleDateString()}</div>
+                <div className="flex gap-4">
+                  <span className="flex items-center gap-1 text-cyan-300 bg-cyan-900/30 px-3 py-1 rounded-full text-sm"><Droplets size={14}/> {entry.water}L</span>
+                  <span className="flex items-center gap-1 text-green-300 bg-green-900/30 px-3 py-1 rounded-full text-sm"><Leaf size={14}/> {entry.cropHealth}</span>
+                </div>
+              </div>
+              <p className="text-gray-300">{entry.notes}</p>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

@@ -13,14 +13,13 @@ const plans = [
     period: 'forever',
     color: 'border-gray-600',
     badge: null,
-    description: 'Perfect for individual farmers getting started.',
+    description: 'Perfect for individual farmers testing the app.',
     features: [
-      'AI chatbot — 5 queries/day',
-      '3 crop recommendations/month',
+      'Maximum 5 AI Crop Doctor Scans',
+      'Maximum 5 Smart Crop Plans',
       'View community water reports',
       'Public government schemes list',
-      'Basic water health score',
-      'Community leaderboard access',
+      'Basic weather predictions',
     ],
     cta: 'Get Started Free',
     ctaStyle: 'border border-gray-500 hover:border-gray-300 text-white',
@@ -29,44 +28,39 @@ const plans = [
     id: 'premium',
     name: 'Premium',
     icon: Zap,
-    price: '₹7',
-    annualPrice: '₹5',
+    price: '₹9',
+    annualPrice: '₹7',
     period: '/month',
     color: 'border-blue-500',
-    badge: '⭐ Most Popular',
-    description: 'For serious farmers wanting maximum yield and savings.',
+    badge: '⭐ Unlimited Access',
+    description: 'Unlimited AI power for serious farmers wanting maximum yield.',
     features: [
-      'Unlimited AI chatbot queries',
-      'Unlimited crop recommendations',
-      'Advanced profitability calculator',
+      'Unlimited AI Crop Doctor Scans',
+      'Unlimited Smart Crop Plans',
+      'Advanced 3-Day Weather Predictor',
       'Submit + track water reports',
       'Priority scheme eligibility alerts',
-      'Detailed water health predictions',
       'Export reports as PDF',
-      'Village water health history',
     ],
-    cta: 'Upgrade to Premium',
+    cta: 'Upgrade for ₹9',
     ctaStyle: 'btn-glow text-white',
   },
   {
     id: 'ngo',
-    name: 'NGO / Government',
+    name: 'B2B API Access',
     icon: Building2,
-    price: '₹4,999',
-    annualPrice: '₹3,749',
+    price: '₹2,999',
+    annualPrice: '₹1,999',
     period: '/month',
     color: 'border-green-500',
     badge: '🏛️ Enterprise',
-    description: 'For NGOs, water boards, and government departments.',
+    description: 'For AgriTech startups, NGOs, and government departments.',
     features: [
       'Everything in Premium',
       'Data-as-a-Service REST API access',
       'Custom village analytics dashboard',
       'Multi-user team accounts',
       'White-label branding options',
-      'Regional water trend reports',
-      'Dedicated account manager',
-      'SLA-backed uptime guarantee',
     ],
     cta: 'Get Enterprise Plan',
     ctaStyle: 'border border-green-500 text-green-400 hover:bg-green-500/10',
@@ -107,73 +101,66 @@ export default function Pricing() {
     setLoading(plan.id);
     setResult(null);
     try {
-      const order = await createOrder(plan.id);
+      // 1. Ask backend to create a real Razorpay Order
+      const orderData = await createOrder(plan.id);
 
-      // MOCK MODE — real keys not added yet
-      if (order.mock) {
-        // Open visual Razorpay test mode so judges can see the UI working!
-        const options = {
-          key: 'rzp_test_T4jpgrih2rcmLq', // Your test key
-          amount: plan.amount,
-          currency: plan.currency,
-          name: 'NeerMitra AI',
-          description: plan.name,
-          prefill: {
-            name: user?.name || '',
-            email: user?.email || '',
-          },
-          theme: { color: '#3B82F6' },
-          handler: function (response) {
-            setResult({ success: true, message: `🎉 Payment successful! Mock verified for ${plan.name}.` });
-            setLoading(null);
-          },
-          modal: {
-            ondismiss: () => setLoading(null),
-          },
-        };
-        const rzp = new window.Razorpay(options);
-        rzp.on('payment.failed', function (resp) {
-          setResult({ success: false, message: `Payment failed: ${resp.error.description}` });
-          setLoading(null);
-        });
-        rzp.open();
+      if (orderData.mock) {
+        // Fallback mock handling if keys are missing in backend
+        setResult({ success: true, message: orderData.message });
+        setLoading(null);
         return;
       }
 
-      // Real Razorpay checkout popup
+      // 2. Open Razorpay Checkout Window
       const options = {
-        key:          order.keyId,
-        amount:       order.amount,
-        currency:     order.currency,
-        name:         'NeerMitra AI',
-        description:  plan.name,
-        order_id:     order.orderId,
+        key: orderData.keyId,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'NeerMitra AI',
+        description: orderData.planName,
+        order_id: orderData.orderId, // IMPORTANT: Backend order ID
         prefill: {
-          name:  user?.name  || '',
+          name: user?.name || '',
           email: user?.email || '',
         },
         theme: { color: '#3B82F6' },
-        handler: async (response) => {
+        handler: async function (response) {
           try {
-            const verified = await verifyPayment({
-              razorpay_order_id:   response.razorpay_order_id,
+            // 3. Send signature to backend for cryptographic verification
+            const verifyData = await verifyPayment({
+              razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature:  response.razorpay_signature,
-              planId:              plan.id,
+              razorpay_signature: response.razorpay_signature,
+              planId: plan.id
             });
-            setResult({ success: true, message: verified.message });
-          } catch {
-            setResult({ success: false, message: '⚠️ Payment verification failed. Contact support.' });
+
+            if (verifyData.success) {
+              // Reset frontend usage limits
+              localStorage.setItem('planner_count', '0');
+              localStorage.setItem('disease_scans_count', '0');
+              
+              // Update user object to premium
+              const updatedUser = { ...user, plan: plan.id };
+              localStorage.setItem('neermitra_user', JSON.stringify(updatedUser));
+              setUser(updatedUser);
+
+              setResult({ success: true, message: verifyData.message || `🎉 Payment successful! You now have access to ${plan.name}.` });
+            } else {
+              setResult({ success: false, message: 'Verification failed.' });
+            }
+          } catch (err) {
+            setResult({ success: false, message: err.message || 'Verification failed.' });
+          } finally {
+            setLoading(null);
           }
-          setLoading(null);
         },
         modal: {
           ondismiss: () => setLoading(null),
         },
       };
-
+      
       const rzp = new window.Razorpay(options);
-      rzp.on('payment.failed', (resp) => {
+      rzp.on('payment.failed', function (resp) {
         setResult({ success: false, message: `Payment failed: ${resp.error.description}` });
         setLoading(null);
       });

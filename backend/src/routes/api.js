@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const OpenAI = require('openai');
+const { GoogleGenAI } = require('@google/genai');
 
-// Initialize OpenAI conditionally to prevent crashing if key is missing
-let openai;
-if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'your_openai_api_key_here') {
-  openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// Initialize Gemini conditionally
+let ai;
+if (process.env.GEMINI_API_KEY) {
+  ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 }
 
 // Health Check
@@ -18,20 +18,19 @@ router.post('/', async (req, res) => {
   const { query } = req.body;
   const q = query.toLowerCase();
 
-  // Try real OpenAI ChatGPT API first if initialized
-  if (openai) {
+  // Try real Gemini API first
+  if (ai) {
     try {
-      const completion = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [
-          { role: "system", content: "You are NeerMitra AI, a super friendly farming advisor. Use emojis, be extremely concise (3 sentences max), and act like a helpful friend. Mention water conservation if relevant." },
-          { role: "user", content: query }
+      const response = await ai.models.generateContent({
+        model: 'gemini-1.5-flash',
+        contents: [
+          { role: 'user', parts: [{ text: "You are NeerMitra AI, a super friendly farming advisor. Always start your response with 'Hello friend!' or similar friendly greeting in the detected language. Use emojis, be extremely concise (3 sentences max). You MUST detect the language of the user's input (English, Hindi, Tamil, etc.) and reply natively in that EXACT same language. Mention water conservation if relevant.\n\nUser Question: " + query }] }
         ],
-        max_tokens: 150
+        config: { maxOutputTokens: 200 }
       });
-      return res.json({ response: completion.choices[0].message.content });
+      return res.json({ response: response.text });
     } catch (err) {
-      console.warn("⚠️ Real OpenAI call failed (maybe quota exceeded?). Falling back to intent parser.");
+      console.warn("⚠️ Real Gemini call failed. Falling back to intent parser.", err.message);
       // Fall through to intent parser below
     }
   }
