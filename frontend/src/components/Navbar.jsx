@@ -72,7 +72,7 @@ export default function Navbar() {
     <>
     {showAuth && <AuthModal onClose={() => setShowAuth(false)} onSuccess={(u) => { setUser(u); setShowAuth(false); }} />}
     <nav className="sticky top-0 z-50 mx-4 mt-4">
-      <div className="glass-strong px-6 py-3 flex items-center justify-between gap-4">
+      <div className="bg-slate-900/90 backdrop-blur-xl border border-blue-500/20 shadow-[0_4px_30px_rgba(59,130,246,0.1)] rounded-2xl px-6 py-3 flex items-center justify-between gap-4">
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 flex-shrink-0">
