@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Droplets, Menu, X, Zap, Globe, ArrowUpRight, Building2, UserCircle, LogOut } from 'lucide-react';
+import { Droplets, Menu, X, Zap, Globe, ArrowUpRight, Building2, UserCircle, LogOut, Home, Leaf } from 'lucide-react';
 import AuthModal from './AuthModal';
 
 const LANGUAGES = [
@@ -76,11 +76,11 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 flex-shrink-0">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-green-400 flex items-center justify-center shadow-lg animate-pulse-glow">
-            <Droplets size={20} className="text-white" />
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center shadow-lg animate-pulse-glow">
+            <Leaf size={20} className="text-white" />
           </div>
-          <span className="text-xl font-bold font-['Space_Grotesk'] shimmer-text hidden sm:block">
-            NeerMitra AI
+          <span className="text-lg md:text-xl font-bold font-['Space_Grotesk'] shimmer-text">
+            NeerMitra
           </span>
         </Link>
 
@@ -166,16 +166,21 @@ export default function Navbar() {
             </button>
           )}
 
-          {/* Mobile hamburger */}
-          <button onClick={() => setOpen(!open)} className="lg:hidden p-2 rounded-lg hover:bg-white/10">
-            {open ? <X size={22} /> : <Menu size={22} />}
-          </button>
+          {/* Mobile Home & Hamburger */}
+          <div className="flex items-center gap-1 lg:hidden">
+            <Link to="/" className="p-2 rounded-lg hover:bg-white/10 text-gray-300">
+              <Home size={22} />
+            </Link>
+            <button onClick={() => setOpen(!open)} className="p-2 rounded-lg hover:bg-white/10 text-white">
+              {open ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {open && (
-        <div className="glass-strong mt-2 p-4 flex flex-col gap-2 lg:hidden animate-slide-up border border-white/15">
+        <div className="absolute top-[85px] left-4 right-4 bg-slate-900 shadow-2xl z-[100] mt-2 p-4 flex flex-col gap-2 lg:hidden animate-slide-up border border-blue-500/30 rounded-2xl">
           {navLinks.map(link => (
             <Link key={link.to} to={link.to} onClick={() => setOpen(false)}
               className={`px-4 py-3 rounded-xl text-sm font-medium transition-all

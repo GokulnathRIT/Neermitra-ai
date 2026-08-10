@@ -14,9 +14,12 @@ import Lessons from './pages/Lessons';
 import B2BPortal from './pages/B2BPortal';
 import HouseFarming from './pages/HouseFarming';
 
+import ScrollToTop from './components/ScrollToTop';
+
 export default function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-grow">

@@ -10,7 +10,12 @@ const getHeaders = () => {
 };
 
 const handleResponse = async (res) => {
-  const data = await res.json();
+  let data;
+  try {
+    data = await res.json();
+  } catch (err) {
+    throw new Error('Server is waking up from sleep. Please wait 30 seconds and try again!');
+  }
   if (!res.ok) throw new Error(data.error || 'Something went wrong');
   return data;
 };
