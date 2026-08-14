@@ -112,7 +112,7 @@ export default function Navbar() {
 
             {/* Hint Tooltip */}
             {showTooltip && (
-              <div className="absolute top-16 -left-20 md:left-0 w-64 p-4 bg-blue-600 text-white text-base font-extrabold rounded-2xl shadow-2xl animate-bounce z-50">
+              <div className="hidden sm:block absolute top-16 -left-20 md:left-0 w-64 p-4 bg-blue-600 text-white text-base font-extrabold rounded-2xl shadow-2xl animate-bounce z-50">
                 <div className="absolute -top-3 right-16 md:left-12 w-6 h-6 bg-blue-600 rotate-45"></div>
                 <span className="text-2xl mr-2">🌍</span> Switch languages easily here!
               </div>
