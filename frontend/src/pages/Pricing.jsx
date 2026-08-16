@@ -28,7 +28,7 @@ const plans = [
     id: 'premium',
     name: 'Premium',
     icon: Zap,
-    price: '₹9',
+    price: '₹99',
     annualPrice: '₹99',
     period: '/month',
     color: 'border-blue-500',

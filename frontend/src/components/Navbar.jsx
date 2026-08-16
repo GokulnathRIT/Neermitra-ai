@@ -154,7 +154,8 @@ export default function Navbar() {
               <div className="hidden lg:flex flex-col items-end mr-2 border-r border-white/10 pr-4">
                 <span className="text-xs text-gray-400">Refer & Earn (Free Premium!)</span>
                 <span className="text-sm font-bold text-blue-300">Code: {user.referralCode || 'N/A'}</span>
-                <span className="text-xs text-green-400">{user.referredCount || 0}/3 Friends Invited</span>
+                <span className="text-xs text-green-400">{user.referredCount || 0}/7 Friends Invited</span>
+                <span className="text-[10px] text-gray-500 mt-1 italic">Log out & log back in to refresh</span>
               </div>
               <button onClick={handleLogout} className="hidden lg:flex items-center gap-2 px-4 py-2 bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 text-sm rounded-xl font-bold transition-colors">
                 <LogOut size={15} /> Logout
@@ -209,7 +210,8 @@ export default function Navbar() {
                 <div className="bg-blue-900/20 border border-blue-500/30 p-3 rounded-xl flex flex-col items-center">
                   <span className="text-xs text-gray-400 mb-1">Refer & Earn (Free Premium!)</span>
                   <span className="text-lg font-bold text-blue-300">Code: {user.referralCode || 'N/A'}</span>
-                  <span className="text-xs text-green-400 mt-1">{user.referredCount || 0}/3 Friends Invited</span>
+                  <span className="text-xs text-green-400 mt-1">{user.referredCount || 0}/7 Friends Invited</span>
+                  <span className="text-[10px] text-gray-500 mt-1 italic">Log out & log back in to refresh</span>
                 </div>
                 <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-3 bg-red-500/20 text-red-400 rounded-xl text-sm font-bold justify-center">
                   <LogOut size={18} /> Logout ({user.name})

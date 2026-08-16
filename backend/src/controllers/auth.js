@@ -18,8 +18,8 @@ exports.register = async (req, res) => {
       const referrer = await User.findOne({ referralCode: referralCode.toUpperCase() });
       if (referrer && referrer._id.toString() !== user._id.toString()) {
         referrer.referredCount += 1;
-        // Upgrade to premium if they hit 3 referrals
-        if (referrer.referredCount >= 3 && referrer.plan === 'free') {
+        // Upgrade to premium if they hit 7 referrals
+        if (referrer.referredCount >= 7 && referrer.plan === 'free') {
           referrer.plan = 'premium';
         }
         await referrer.save();
