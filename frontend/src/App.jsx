@@ -18,9 +18,12 @@ import ScrollToTop from './components/ScrollToTop';
 import { Analytics } from '@vercel/analytics/react';
 import LanguageSelectorModal from './components/LanguageSelectorModal';
 
+import { HelmetProvider } from 'react-helmet-async';
+
 export default function App() {
   return (
-    <Router>
+    <HelmetProvider>
+      <Router>
       <ScrollToTop />
       <Analytics />
       <LanguageSelectorModal />
@@ -50,6 +53,7 @@ export default function App() {
           <p className="mt-1">Predict Water. Protect Communities. Empower Farmers.</p>
         </footer>
       </div>
-    </Router>
+      </Router>
+    </HelmetProvider>
   );
 }

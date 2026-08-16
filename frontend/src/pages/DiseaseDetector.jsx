@@ -4,6 +4,8 @@ import { detectDisease } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import AuthModal from '../components/AuthModal';
 
+import { Helmet } from 'react-helmet-async';
+
 export default function DiseaseDetector() {
   const [file, setFile] = useState(null);
   const [symptoms, setSymptoms] = useState('');
@@ -123,17 +125,25 @@ export default function DiseaseDetector() {
   };
 
   return (
-    <div className="py-10 max-w-5xl mx-auto space-y-8 px-4">
-      {showAuth && <AuthModal onClose={() => setShowAuth(false)} onSuccess={() => { setShowAuth(false); handleAnalyze(); }} />}
-      <div className="text-center space-y-4">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-400 mb-2 shadow-lg shadow-green-500/20">
-          <Stethoscope size={32} className="text-white" />
+    <>
+      <Helmet>
+        <title>AI Crop Disease Scanner | NeerMitra</title>
+        <meta name="description" content="Upload a photo of your diseased crop leaf. Our AI will instantly detect the disease and recommend the best organic and chemical treatments." />
+        <meta property="og:title" content="AI Crop Disease Scanner | NeerMitra" />
+        <meta property="og:description" content="Instantly scan crop leaves and get treatment recommendations." />
+      </Helmet>
+      <div className="py-10 max-w-5xl mx-auto space-y-8 px-4">
+        {showAuth && <AuthModal onClose={() => setShowAuth(false)} onSuccess={() => { setShowAuth(false); handleAnalyze(); }} />}
+        
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-400 mb-2 shadow-lg shadow-green-500/20">
+            <Stethoscope size={32} className="text-white" />
+          </div>
+          <h1 className="text-4xl font-bold font-['Space_Grotesk']">Crop Doctor</h1>
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg">Upload a photo of your damaged crop or describe the symptoms. Our AI will identify the disease and provide safe, organic remedies.</p>
         </div>
-        <h1 className="text-4xl font-bold font-['Space_Grotesk']">Crop Doctor</h1>
-        <p className="text-gray-400 max-w-2xl mx-auto text-lg">Upload a photo of your damaged crop or describe the symptoms. Our AI will identify the disease and provide safe, organic remedies.</p>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         {/* Left Side: Input Form */}
         <div className="space-y-6">
@@ -235,5 +245,6 @@ export default function DiseaseDetector() {
 
       </div>
     </div>
+    </>
   );
 }

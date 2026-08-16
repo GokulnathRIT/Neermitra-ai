@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://neermitra.com/sitemap.xml

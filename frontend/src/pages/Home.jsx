@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Stethoscope, CloudRain, Sprout, Landmark, Home as HomeIcon } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 export default function Home() {
   const { t } = useTranslation();
@@ -45,6 +46,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 space-y-12">
+      <Helmet>
+        <title>NeerMitra AI | India's First AI Agri-Tech Platform</title>
+        <meta name="description" content="India's first AI-powered water intelligence and crop disease scanner platform for rural farmers. Predict Water. Protect Communities." />
+        <meta property="og:title" content="NeerMitra AI | Empowering Farmers" />
+        <meta property="og:description" content="AI Disease Scanner, Weather Tracking, and Crop Planning for Indian Farmers." />
+      </Helmet>
       
       {/* ── Hero Title ─────────────────────────────────────────── */}
       <section className="text-center space-y-4 max-w-4xl mx-auto pt-8">
