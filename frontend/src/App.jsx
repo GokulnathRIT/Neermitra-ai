@@ -16,12 +16,14 @@ import HouseFarming from './pages/HouseFarming';
 
 import ScrollToTop from './components/ScrollToTop';
 import { Analytics } from '@vercel/analytics/react';
+import LanguageSelectorModal from './components/LanguageSelectorModal';
 
 export default function App() {
   return (
     <Router>
       <ScrollToTop />
       <Analytics />
+      <LanguageSelectorModal />
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-grow">
