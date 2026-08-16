@@ -29,7 +29,7 @@ const plans = [
     name: 'Premium',
     icon: Zap,
     price: '₹9',
-    annualPrice: '₹7',
+    annualPrice: '₹99',
     period: '/month',
     color: 'border-blue-500',
     badge: '⭐ Unlimited Access',
@@ -68,7 +68,7 @@ const plans = [
 ];
 
 const revenueStreams = [
-  { emoji: '💎', title: 'Freemium Subscriptions',     color: 'from-blue-600/20 to-blue-800/10 border-blue-500/30',   desc: 'Free tier drives adoption. Premium converts power users at ₹7/mo. Enterprise targets NGOs at ₹4,999/mo.',        revenue: 'Est. ₹15L–₹40L/year' },
+  { emoji: '💎', title: 'Freemium Subscriptions',     color: 'from-blue-600/20 to-blue-800/10 border-blue-500/30',   desc: 'Free tier drives adoption. Premium converts power users at ₹99/mo. Enterprise targets NGOs at ₹4,999/mo.',        revenue: 'Est. ₹15L–₹40L/year' },
   { emoji: '📢', title: 'Sponsored Dashboards & Ads', color: 'from-purple-600/20 to-purple-800/10 border-purple-500/30', desc: 'AgriTech companies and fertilizer brands pay to show contextual ads to farmers viewing crop recommendations.',      revenue: 'Est. ₹8L–₹20L/year'  },
   { emoji: '📊', title: 'Data-as-a-Service (DaaS)',   color: 'from-green-600/20 to-green-800/10 border-green-500/30',  desc: 'Anonymised water & crop data sold to govt agencies, insurance companies, climate startups, and researchers.',     revenue: 'Est. ₹20L–₹60L/year' },
   { emoji: '🤝', title: 'CSR & Grant Partnerships',   color: 'from-teal-600/20 to-teal-800/10 border-teal-500/30',    desc: 'Partner with NABARD, ICAR, and CSR arms of Tata, Mahindra, ITC for sponsored water conservation programs.',       revenue: 'Est. ₹10L–₹30L/year' },

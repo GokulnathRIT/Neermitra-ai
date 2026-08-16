@@ -214,9 +214,18 @@ export default function DiseaseDetector() {
 
               <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
                 <h3 className="text-lg font-bold text-blue-400 flex items-center gap-2"><Stethoscope size={20}/> Commercial Pesticides (Use carefully)</h3>
-                <ul className="list-disc list-inside text-gray-300 mt-2 space-y-1">
+                <ul className="text-gray-300 mt-2 space-y-4">
                   {result.pesticides?.map((pest, i) => (
-                    <li key={i}>{pest}</li>
+                    <li key={i} className="flex flex-col gap-2">
+                      <div className="flex items-start gap-2">
+                        <span className="text-blue-400 mt-1">•</span>
+                        <span>{pest}</span>
+                      </div>
+                      <a href={`https://www.amazon.in/s?k=${encodeURIComponent(pest.split(' ')[0] + ' fungicide pesticide')}&tag=neermitra-21`} target="_blank" rel="noopener noreferrer" 
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-400 hover:to-yellow-400 text-slate-900 font-bold rounded-xl text-sm transition-all w-fit shadow-[0_0_15px_rgba(249,115,22,0.3)]">
+                        🛒 Buy on Amazon (Ad)
+                      </a>
+                    </li>
                   ))}
                 </ul>
               </div>

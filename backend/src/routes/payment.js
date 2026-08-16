@@ -25,7 +25,7 @@ if (RAZORPAY_KEY_ID && RAZORPAY_KEY_SECRET &&
 const PLANS = {
   premium: {
     name:     'NeerMitra Premium',
-    amount:   700,   // ₹7 in paise
+    amount:   9900,   // ₹99 in paise
     currency: 'INR',
     description: 'Unlimited AI queries, crop planning & priority alerts',
   },
