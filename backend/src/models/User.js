@@ -12,6 +12,8 @@ const userSchema = new mongoose.Schema({
     diseaseScans: { type: Number, default: 0 },
     cropPlans: { type: Number, default: 0 }
   },
+  securityQuestion: { type: String },
+  securityAnswer: { type: String },
   resetToken: String,
   resetTokenExpiry: Date
 }, { timestamps: true });

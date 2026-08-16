@@ -5,49 +5,67 @@ import { registerUser, loginUser } from '../services/api';
 
 export default function AuthModal({ onClose, onSuccess }) {
   const { t } = useTranslation();
-  const [mode,    setMode]    = useState('login');
-  const [form,    setForm]    = useState({ name: '', email: '', password: '', referralCode: '', role: 'farmer', village: '', district: '' });
+  const [mode,    setMode]    = useState('login'); // login, register, forgot_password_email, forgot_password_reset
+  const [form,    setForm]    = useState({ 
+    name: '', email: '', password: '', referralCode: '', role: 'farmer', village: '', district: '',
+    securityQuestion: '', securityAnswer: '', newPassword: ''
+  });
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState('');
+  const [fetchedQuestion, setFetchedQuestion] = useState('');
 
   const handle = e => setForm({ ...form, [e.target.name]: e.target.value });
 
   const submit = async () => {
-    if (mode === 'forgot_password') {
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    
+    if (mode === 'forgot_password_email') {
       if (!form.email) return setError('Email is required.');
       setLoading(true); setError('');
       try {
-        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-        const res = await fetch(`${baseUrl}/api/auth/forgot-password`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch(`${baseUrl}/api/auth/security-question`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: form.email })
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to send reset link');
-        setError('');
-        alert('Reset link sent to your email (simulated).');
+        if (!res.ok) throw new Error(data.error || 'Failed to fetch security question');
+        setFetchedQuestion(data.question);
+        setMode('forgot_password_reset');
+      } catch (err) { setError(err.message); } finally { setLoading(false); }
+      return;
+    }
+
+    if (mode === 'forgot_password_reset') {
+      if (!form.securityAnswer || !form.newPassword) return setError('Please fill all fields.');
+      setLoading(true); setError('');
+      try {
+        const res = await fetch(`${baseUrl}/api/auth/reset-password`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: form.email, answer: form.securityAnswer, newPassword: form.newPassword })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to reset password');
+        alert('Password successfully reset! You can now log in.');
         setMode('login');
-      } catch (err) {
-        setError(err.message);
-      } finally { setLoading(false); }
+      } catch (err) { setError(err.message); } finally { setLoading(false); }
       return;
     }
 
     if (!form.email || !form.password) return setError('Email and password are required.');
-    if (mode === 'register' && !form.name) return setError('Name is required.');
+    if (mode === 'register') {
+      if (!form.name) return setError('Name is required.');
+      if (!form.securityQuestion || !form.securityAnswer) return setError('Security Question and Answer are required for password recovery.');
+    }
+    
     setLoading(true); setError('');
     try {
       const fn   = mode === 'login' ? loginUser : registerUser;
-      // Strip referralCode if login so it doesn't cause issues
       const payload = mode === 'login' ? { email: form.email, password: form.password } : form;
       const data = await fn(payload);
       localStorage.setItem('neermitra_token', data.token);
       localStorage.setItem('neermitra_user', JSON.stringify(data.user));
       onSuccess(data.user);
-    } catch (err) {
-      setError(err.message);
-    } finally { setLoading(false); }
+    } catch (err) { setError(err.message); } finally { setLoading(false); }
   };
 
   return (
@@ -61,10 +79,12 @@ export default function AuthModal({ onClose, onSuccess }) {
             {mode === 'login' ? t('welcome_back') : mode === 'register' ? t('create_account') : 'Reset Password'}
           </h2>
           <p className="text-gray-400 text-sm">
-            {mode === 'login' ? 'Sign in to access NeerMitra AI' : mode === 'register' ? 'Join 12,450+ farmers on NeerMitra' : 'Enter your email to receive a reset link'}
+            {mode === 'login' ? 'Sign in to access NeerMitra AI' : mode === 'register' ? 'Join 12,450+ farmers on NeerMitra' : mode === 'forgot_password_email' ? 'Enter your email to answer your security question' : 'Answer your security question to reset password'}
           </p>
         </div>
+        
         <div className="space-y-3">
+          {/* Register Name */}
           {mode === 'register' && (
             <div className="relative">
               <User size={16} className="absolute left-3 top-3.5 text-gray-400" />
@@ -72,18 +92,59 @@ export default function AuthModal({ onClose, onSuccess }) {
                 className="w-full pl-9 pr-4 py-3 rounded-xl bg-white/8 border border-white/15 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm" />
             </div>
           )}
-          <div className="relative">
-            <Mail size={16} className="absolute left-3 top-3.5 text-gray-400" />
-            <input name="email" type="email" placeholder={t('email')} onChange={handle}
-              className="w-full pl-9 pr-4 py-3 rounded-xl bg-white/8 border border-white/15 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm" />
-          </div>
-          {mode !== 'forgot_password' && (
+          
+          {/* Email (Hidden in reset step) */}
+          {mode !== 'forgot_password_reset' && (
+            <div className="relative">
+              <Mail size={16} className="absolute left-3 top-3.5 text-gray-400" />
+              <input name="email" type="email" placeholder={t('email')} onChange={handle}
+                className="w-full pl-9 pr-4 py-3 rounded-xl bg-white/8 border border-white/15 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm" />
+            </div>
+          )}
+
+          {/* Login/Register Password */}
+          {(mode === 'login' || mode === 'register') && (
             <div className="relative">
               <Lock size={16} className="absolute left-3 top-3.5 text-gray-400" />
               <input name="password" type="password" placeholder={t('password')} onChange={handle}
                 className="w-full pl-9 pr-4 py-3 rounded-xl bg-white/8 border border-white/15 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm" />
             </div>
           )}
+
+          {/* Register: Security Question */}
+          {mode === 'register' && (
+            <div className="p-3 bg-blue-900/10 border border-blue-500/20 rounded-xl space-y-3 mt-2">
+              <p className="text-xs text-blue-300 font-bold">🔒 Password Recovery Setup</p>
+              <select name="securityQuestion" onChange={handle} className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-white/15 text-white focus:outline-none focus:border-blue-500 text-sm">
+                <option value="">-- Select a Security Question --</option>
+                <option value="What is your favorite crop?">What is your favorite crop?</option>
+                <option value="What is the name of your village?">What is the name of your village?</option>
+                <option value="What was your first pet's name?">What was your first pet's name?</option>
+                <option value="What is your favorite color?">What is your favorite color?</option>
+              </select>
+              <input name="securityAnswer" placeholder="Your Secret Answer" onChange={handle}
+                className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-white/15 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm" />
+            </div>
+          )}
+
+          {/* Forgot Password Reset Step */}
+          {mode === 'forgot_password_reset' && (
+            <div className="space-y-4">
+              <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
+                <p className="text-xs text-gray-400">Security Question:</p>
+                <p className="text-md font-bold text-white mt-1">{fetchedQuestion}</p>
+              </div>
+              <input name="securityAnswer" placeholder="Type your secret answer" onChange={handle}
+                className="w-full px-4 py-3 rounded-xl bg-white/8 border border-white/15 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm" />
+              <div className="relative">
+                <Lock size={16} className="absolute left-3 top-3.5 text-gray-400" />
+                <input name="newPassword" type="password" placeholder="Enter New Password" onChange={handle}
+                  className="w-full pl-9 pr-4 py-3 rounded-xl bg-white/8 border border-white/15 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm" />
+              </div>
+            </div>
+          )}
+
+          {/* Register: Location & Role */}
           {mode === 'register' && (
             <>
               <div className="relative">
@@ -113,7 +174,7 @@ export default function AuthModal({ onClose, onSuccess }) {
         
         {mode === 'login' && (
           <div className="flex justify-end -mt-2">
-            <button onClick={() => { setMode('forgot_password'); setError(''); }} className="text-xs text-blue-400 hover:text-blue-300">
+            <button onClick={() => { setMode('forgot_password_email'); setError(''); }} className="text-xs text-blue-400 hover:text-blue-300">
               Forgot Password?
             </button>
           </div>
@@ -121,15 +182,31 @@ export default function AuthModal({ onClose, onSuccess }) {
 
         <button onClick={submit} disabled={loading}
           className="w-full py-3 btn-glow rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-60 text-white">
-          {loading ? <><Loader size={18} className="animate-spin" /> Processing...</> : mode === 'login' ? t('sign_in') : mode === 'register' ? t('create_account') : 'Send Reset Link'}
+          {loading ? <><Loader size={18} className="animate-spin" /> Processing...</> : 
+           mode === 'login' ? t('sign_in') : 
+           mode === 'register' ? t('create_account') : 
+           mode === 'forgot_password_email' ? 'Fetch Security Question' : 'Reset Password'}
         </button>
-        <p className="text-center text-sm text-gray-400">
-          {mode === 'login' ? "Don't have an account?" : mode === 'register' ? 'Already have an account?' : 'Remembered your password?'} {' '}
-          <button onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); }}
-            className="text-blue-400 hover:text-blue-300 font-semibold">
-            {mode === 'login' ? t('register') : t('sign_in')}
-          </button>
-        </p>
+        
+        {(mode === 'login' || mode === 'register') && (
+          <p className="text-center text-sm text-gray-400">
+            {mode === 'login' ? "Don't have an account?" : 'Already have an account?'} {' '}
+            <button onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); }}
+              className="text-blue-400 hover:text-blue-300 font-semibold">
+              {mode === 'login' ? t('register') : t('sign_in')}
+            </button>
+          </p>
+        )}
+        
+        {(mode === 'forgot_password_email' || mode === 'forgot_password_reset') && (
+          <p className="text-center text-sm text-gray-400">
+            Remembered your password? {' '}
+            <button onClick={() => { setMode('login'); setError(''); }}
+              className="text-blue-400 hover:text-blue-300 font-semibold">
+              Sign In
+            </button>
+          </p>
+        )}
       </div>
     </div>
   );

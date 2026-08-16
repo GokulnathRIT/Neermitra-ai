@@ -113,6 +113,9 @@ export default function B2BPortal() {
         <p className="relative z-10 text-gray-300 max-w-xl text-lg">
           Get direct contact details for all 12,000+ farmers, access the live Disease Heatmap, and download complete district CSV reports.
         </p>
+        <p className="relative z-10 text-green-400 font-bold text-lg">
+          For Enterprise Sales, Contact: +91 7904769396
+        </p>
         <button 
           onClick={() => navigate('/pricing')}
           className="relative z-10 btn-glow px-8 py-4 rounded-xl font-bold text-white text-lg flex items-center gap-2 hover:scale-105 transition-transform"
