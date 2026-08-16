@@ -42,7 +42,7 @@ const plans = [
       'Priority scheme eligibility alerts',
       'Export reports as PDF',
     ],
-    cta: 'Upgrade for ₹9',
+    cta: 'Upgrade for ₹99',
     ctaStyle: 'btn-glow text-white',
   },
   {
@@ -238,7 +238,7 @@ export default function Pricing() {
         {plans.map((plan, i) => {
           const Icon    = plan.icon;
           const display = annual ? plan.annualPrice : plan.price;
-          const isLoad  = loading === plan.id;
+          const isLoad  = loading !== null && loading === plan.id;
 
           return (
             <div key={i} className={`glass-card border-2 ${plan.color} p-7 flex flex-col gap-6 relative
