@@ -8,35 +8,35 @@ export default function Home() {
 
   const mainTools = [
     { 
-      imgSrc: '/assets/natural_crop_doctor.png',      
+      Icon: Stethoscope,
       color: 'from-green-500 to-emerald-400', 
       title: t('doctor') || 'Crop Doctor',   
       desc: 'Take a photo of a diseased leaf for an instant AI diagnosis and remedy.', 
       to: '/doctor' 
     },
     { 
-      imgSrc: '/assets/natural_dashboard.png',        
+      Icon: CloudRain,
       color: 'from-blue-500 to-cyan-400',    
       title: t('dashboard') || 'Weather Dashboard', 
       desc: 'Live 3-day weather predictor and soil moisture tracking for your district.', 
       to: '/dashboard' 
     },
     { 
-      imgSrc: '/assets/natural_crop_planner.png',           
+      Icon: Sprout,
       color: 'from-emerald-500 to-teal-400', 
       title: t('planner') || 'Crop Planner',   
       desc: 'AI-driven crop profitability and yield estimator based on your land.', 
       to: '/planner' 
     },
     { 
-      imgSrc: '/assets/govt_schemes.png',         
+      Icon: Landmark,
       color: 'from-purple-500 to-violet-400', 
       title: t('schemes') || 'Govt Schemes',   
       desc: 'Discover agricultural subsidies and financial schemes you are eligible for.', 
       to: '/schemes' 
     },
     { 
-      imgSrc: '/assets/natural_house_farming.png',         
+      Icon: HomeIcon,
       color: 'from-orange-500 to-amber-400', 
       title: t('house_farming') || 'House Farming',   
       desc: 'Tips for kitchen gardens, planting, soil levels, and natural pesticides.', 
@@ -74,9 +74,9 @@ export default function Home() {
                 {/* Background Glow */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${tool.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl`}></div>
                 
-                {/* 3D Image Icon */}
-                <div className={`w-28 h-28 md:w-32 md:h-32 rounded-3xl overflow-hidden shadow-xl mb-6 shadow-[0_0_40px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_60px_rgba(59,130,246,0.3)] transition-shadow border border-white/20 flex-shrink-0`}>
-                  <img src={tool.imgSrc} alt={tool.title} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
+                {/* Icon Container */}
+                <div className={`w-24 h-24 md:w-28 md:h-28 rounded-full flex items-center justify-center shadow-xl mb-6 shadow-[0_0_40px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_60px_rgba(59,130,246,0.3)] transition-shadow border border-white/20 flex-shrink-0 bg-gradient-to-br ${tool.color}`}>
+                  <tool.Icon className="text-white w-12 h-12 md:w-14 md:h-14 transform group-hover:scale-110 transition-transform duration-500" />
                 </div>
                 
                 <h2 className="text-3xl font-black mb-3 font-['Space_Grotesk']">{tool.title}</h2>
