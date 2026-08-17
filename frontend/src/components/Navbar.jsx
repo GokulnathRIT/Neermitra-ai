@@ -63,7 +63,7 @@ export default function Navbar() {
   const navLinks = [
     { to: '/',          label: t('home') || 'Home' },
     { to: '/journal',   label: 'Journal' },
-    { to: '/lessons',   label: 'Lessons' },
+
     { to: '/pricing',   label: t('pricing') || 'Pricing' },
     { to: '/b2b',       label: t('corporate') || 'Corporate B2B' },
   ];
