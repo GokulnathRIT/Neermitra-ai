@@ -34,6 +34,8 @@ app.use('/api/payment', require('./src/routes/payment'));
 // =====================
 // Root - API Overview
 // =====================
+app.get('/ping', (req, res) => res.send('OK'));
+
 app.get('/', (req, res) => {
   res.json({
     project: 'NeerMitra AI',
