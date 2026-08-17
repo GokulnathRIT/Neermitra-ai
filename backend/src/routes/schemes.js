@@ -10,7 +10,7 @@ const schemes = [
     benefits: 'Up to 55% subsidy on drip/sprinkler irrigation',
     howToApply: 'Apply at your nearest Agriculture Department office or through the PMKSY portal.',
     tags: ['irrigation', 'subsidy', 'all-india'],
-    link: 'https://www.myscheme.gov.in/schemes/pmksy',
+    link: 'https://pmksy.gov.in/',
   },
   {
     id: 'sch_002',
@@ -20,7 +20,7 @@ const schemes = [
     benefits: 'Free functional tap water connection',
     howToApply: 'Contact your local Gram Panchayat or district water board.',
     tags: ['drinking water', 'rural', 'free'],
-    link: 'https://www.myscheme.gov.in/schemes/jjm',
+    link: 'https://jaljeevanmission.gov.in/',
   },
   {
     id: 'sch_003',
@@ -30,7 +30,7 @@ const schemes = [
     benefits: 'Community water management grants and training',
     howToApply: 'Apply through your Gram Panchayat.',
     tags: ['groundwater', 'community', 'sustainability'],
-    link: 'https://www.myscheme.gov.in/schemes/aby',
+    link: 'https://ataljal.mowr.gov.in/',
   },
   {
     id: 'sch_004',
@@ -50,7 +50,7 @@ const schemes = [
     benefits: 'Crop loss compensation at highly subsidised premiums (1.5%-5%)',
     howToApply: 'Enroll through your bank, insurance company, or Common Service Centre before the cut-off date.',
     tags: ['insurance', 'crop loss', 'drought', 'flood'],
-    link: 'https://www.myscheme.gov.in/schemes/pmfby',
+    link: 'https://pmfby.gov.in/',
   },
 ];
 
