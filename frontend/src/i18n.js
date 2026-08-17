@@ -18,7 +18,7 @@ const resources = {
       hero_line1: 'Predict Water.',
       hero_line2: 'Protect Communities.',
       hero_line3: 'Empower Farmers.',
-      hero_sub: "India's first AI-powered water intelligence platform for rural farmers, NGOs and government bodies.",
+      hero_sub: "Your AI Farming Companion. Diagnose crops. Plan cultivation. Monitor conditions. Discover schemes. Grow smarter.",
       talk_to_ai: 'Talk to AI',
       view_plans: 'View Plans',
       live_badge: 'Now live in 230+ villages across India',
