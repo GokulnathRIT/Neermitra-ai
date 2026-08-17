@@ -85,7 +85,7 @@ export default function Schemes() {
       {/* Modal for Step-by-Step Guide */}
       {selectedScheme && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="glass-card max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto relative border border-green-500/50">
+          <div className="bg-[#0F172A] max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto relative border border-green-500 rounded-2xl shadow-2xl">
             <button 
               onClick={() => setSelectedScheme(null)}
               className="absolute top-4 right-4 text-gray-400 hover:text-white text-xl font-bold"
