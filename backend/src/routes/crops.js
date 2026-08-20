@@ -164,13 +164,18 @@ router.post('/detect-disease', async (req, res) => {
 
   if (ai) {
     try {
-      const prompt = `You are an expert plant pathologist. Analyze the provided image (if any) and symptoms (if any).
-1. CRITICAL: Is this image related to agriculture, farming, plants, leaves, or crops? If it is a picture of an event, a person, a random object, or anything non-agricultural, you MUST reject it by responding EXACTLY with this diagnosis: "Please upload a valid photo of a plant, crop, or leaf." and empty arrays for remedies.
-2. If it IS a plant, identify the disease or pest issue.
-
-Return ONLY a raw JSON object in the following exact format (no markdown, no backticks):
+      const prompt = `You are an AI agricultural assistant. Your FIRST job is to verify the image.
+CRITICAL RULE: If the image shows a person, an animal, furniture, a selfie, or ANY non-plant object, you MUST IMMEDIATELY return:
 {
-  "diagnosis": "Detailed explanation of what disease it is, OR the rejection message",
+  "diagnosis": "Invalid image: This does not appear to be a plant. Please upload a clear photo of a crop or leaf.",
+  "naturalRemedies": [],
+  "pesticides": []
+}
+
+If and ONLY IF the image is clearly a plant, leaf, or crop, then act as an expert plant pathologist to identify the disease or pest.
+Return ONLY a raw JSON object in the following exact format:
+{
+  "diagnosis": "Detailed explanation of the disease",
   "naturalRemedies": ["remedy 1", "remedy 2"],
   "pesticides": ["chemical 1", "chemical 2"]
 }
