@@ -90,29 +90,34 @@ export default function DiseaseDetector() {
         }
       }
       
-      // Generate a highly realistic mock diagnosis
-      const mockResult = {
-        diagnosis: symptoms.toLowerCase().includes('hole') || symptoms.toLowerCase().includes('bug') 
-          ? "High probability of Aphids or Caterpillars feeding on the leaves."
-          : "Early stages of Powdery Mildew or Fungal Infection detected based on visual markers.",
-        naturalRemedies: [
-          "Spray Neem Oil diluted with water (5ml per liter) every 3 days.",
-          "Apply a mixture of baking soda and liquid soap to combat fungal growth.",
-          "Ensure proper spacing between plants to improve air circulation."
-        ],
-        pesticides: [
-          "Chlorothalonil (for fungal issues) - Use 2g/liter of water.",
-          "Imidacloprid (for severe pest infestations) - Use only as a last resort."
-        ]
-      };
+      // Convert image to base64 if it exists
+      let imageBase64 = null;
+      if (file) {
+        imageBase64 = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        });
+      }
+
+      // Call the REAL Gemini AI backend
+      const response = await fetch('https://neermitra-backend.onrender.com/api/crops/detect-disease', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageBase64, symptoms })
+      });
       
-      setResult(mockResult);
+      if (!response.ok) {
+        throw new Error("Failed to connect to AI server");
+      }
+      
+      const realResult = await response.json();
+      setResult(realResult);
       
       // Increment usage limit
       const newCount = usageCount + 1;
       setUsageCount(newCount);
       localStorage.setItem('disease_scans_count', newCount.toString());
-      
     } catch (error) {
       console.error(error);
       setResult({
