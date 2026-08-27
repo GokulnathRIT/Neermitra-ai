@@ -65,6 +65,7 @@ export default function Navbar() {
     { to: '/journal',   label: 'Journal' },
     { to: '/lessons',   label: 'Guides' },
     { to: '/pricing',   label: t('pricing') || 'Pricing' },
+    { to: '/hardware',  label: 'Hardware' },
     { to: '/b2b',       label: t('corporate') || 'Corporate B2B' },
   ];
 
