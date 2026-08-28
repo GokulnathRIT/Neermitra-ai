@@ -8,20 +8,23 @@ export default function Hardware() {
 
   useEffect(() => {
     const fetchIoT = async () => {
-      try {
-        const res = await fetch('https://neermitra-backend.onrender.com/api/iot/dashboard');
-        const json = await res.json();
-        setData(json);
-      } catch (err) {
-        console.error('Failed to fetch IoT data', err);
-      } finally {
-        setLoading(false);
-      }
+      // GENERATING DUMMY DATA FOR EXPO DEMO!
+      const dummyMoisture = Math.floor(Math.random() * (65 - 45 + 1) + 45); // Random 45-65%
+      const dummyWaterLevel = Math.floor(Math.random() * (120 - 90 + 1) + 90); // Random 90-120cm
+      const dummyRainfall = Math.floor(Math.random() * (15 - 5 + 1) + 5); // Random 5-15mm
+      
+      setData({
+        averageSoilMoisture: `${dummyMoisture}%`,
+        averageWaterLevel: `${dummyWaterLevel} cm`,
+        averageRainfall: `${dummyRainfall} mm`,
+        totalActiveSensors: 3,
+      });
+      setLoading(false);
     };
     fetchIoT();
     
-    // Auto refresh every 5 seconds for live hardware feel
-    const interval = setInterval(fetchIoT, 5000);
+    // Auto refresh every 3 seconds for live hardware feel
+    const interval = setInterval(fetchIoT, 3000);
     return () => clearInterval(interval);
   }, []);
 
