@@ -30,6 +30,7 @@ app.use('/api/crops',   require('./src/routes/crops'));
 app.use('/api/schemes', require('./src/routes/schemes'));
 app.use('/api/impact',  require('./src/routes/impact'));
 app.use('/api/payment', require('./src/routes/payment'));
+app.use('/api/iot',     require('./src/routes/iot'));
 
 // =====================
 // Root - API Overview
