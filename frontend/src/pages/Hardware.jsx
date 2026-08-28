@@ -8,18 +8,15 @@ export default function Hardware() {
 
   useEffect(() => {
     const fetchIoT = async () => {
-      // GENERATING DUMMY DATA FOR EXPO DEMO (pH and Temperature)!
-      const dummyPH = (Math.random() * (7.5 - 6.5) + 6.5).toFixed(1); // Random 6.5 - 7.5
-      const dummyTemp = Math.floor(Math.random() * (28 - 22 + 1) + 22); // Random 22-28 C
-      const dummyWaterLevel = Math.floor(Math.random() * (120 - 90 + 1) + 90); // Random 90-120cm
-      
-      setData({
-        waterPH: `${dummyPH}`,
-        waterTemp: `${dummyTemp} °C`,
-        waterLevel: `${dummyWaterLevel} cm`,
-        totalActiveSensors: 3,
-      });
-      setLoading(false);
+      try {
+        const res = await fetch('https://neermitra-backend.onrender.com/api/iot/dashboard');
+        const json = await res.json();
+        setData(json);
+      } catch (err) {
+        console.error('Failed to fetch IoT data', err);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchIoT();
     
