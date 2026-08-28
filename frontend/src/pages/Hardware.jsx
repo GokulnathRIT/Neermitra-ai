@@ -50,7 +50,7 @@ export default function Hardware() {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             
             <div className="glass-card p-6 rounded-2xl border border-blue-500/30 flex flex-col items-center justify-center space-y-3 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
@@ -64,13 +64,6 @@ export default function Hardware() {
               <Thermometer size={36} className="text-rose-400" />
               <h3 className="text-gray-400 font-medium">Water Temperature</h3>
               <p className="text-4xl font-bold text-white">{data?.waterTemp || '25 °C'}</p>
-            </div>
-
-            <div className="glass-card p-6 rounded-2xl border border-indigo-500/30 flex flex-col items-center justify-center space-y-3 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
-              <Activity size={36} className="text-indigo-400" />
-              <h3 className="text-gray-400 font-medium">Live Water Level</h3>
-              <p className="text-4xl font-bold text-white">{data?.waterLevel || '100 cm'}</p>
             </div>
             
           </div>
