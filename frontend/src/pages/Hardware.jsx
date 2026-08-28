@@ -8,15 +8,15 @@ export default function Hardware() {
 
   useEffect(() => {
     const fetchIoT = async () => {
-      // GENERATING DUMMY DATA FOR EXPO DEMO!
-      const dummyMoisture = Math.floor(Math.random() * (65 - 45 + 1) + 45); // Random 45-65%
+      // GENERATING DUMMY DATA FOR EXPO DEMO (pH and Temperature)!
+      const dummyPH = (Math.random() * (7.5 - 6.5) + 6.5).toFixed(1); // Random 6.5 - 7.5
+      const dummyTemp = Math.floor(Math.random() * (28 - 22 + 1) + 22); // Random 22-28 C
       const dummyWaterLevel = Math.floor(Math.random() * (120 - 90 + 1) + 90); // Random 90-120cm
-      const dummyRainfall = Math.floor(Math.random() * (15 - 5 + 1) + 5); // Random 5-15mm
       
       setData({
-        averageSoilMoisture: `${dummyMoisture}%`,
-        averageWaterLevel: `${dummyWaterLevel} cm`,
-        averageRainfall: `${dummyRainfall} mm`,
+        waterPH: `${dummyPH}`,
+        waterTemp: `${dummyTemp} °C`,
+        waterLevel: `${dummyWaterLevel} cm`,
         totalActiveSensors: 3,
       });
       setLoading(false);
@@ -55,22 +55,22 @@ export default function Hardware() {
             <div className="glass-card p-6 rounded-2xl border border-blue-500/30 flex flex-col items-center justify-center space-y-3 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
               <Droplets size={36} className="text-blue-400" />
-              <h3 className="text-gray-400 font-medium">Avg Soil Moisture</h3>
-              <p className="text-4xl font-bold text-white">{data?.averageSoilMoisture || '0%'}</p>
+              <h3 className="text-gray-400 font-medium">Water pH Level</h3>
+              <p className="text-4xl font-bold text-white">{data?.waterPH || '7.0'}</p>
+            </div>
+
+            <div className="glass-card p-6 rounded-2xl border border-rose-500/30 flex flex-col items-center justify-center space-y-3 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
+              <Thermometer size={36} className="text-rose-400" />
+              <h3 className="text-gray-400 font-medium">Water Temperature</h3>
+              <p className="text-4xl font-bold text-white">{data?.waterTemp || '25 °C'}</p>
             </div>
 
             <div className="glass-card p-6 rounded-2xl border border-indigo-500/30 flex flex-col items-center justify-center space-y-3 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
               <Activity size={36} className="text-indigo-400" />
-              <h3 className="text-gray-400 font-medium">Avg Water Level</h3>
-              <p className="text-4xl font-bold text-white">{data?.averageWaterLevel || '0 cm'}</p>
-            </div>
-
-            <div className="glass-card p-6 rounded-2xl border border-cyan-500/30 flex flex-col items-center justify-center space-y-3 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
-              <CloudRain size={36} className="text-cyan-400" />
-              <h3 className="text-gray-400 font-medium">Avg Rainfall</h3>
-              <p className="text-4xl font-bold text-white">{data?.averageRainfall || '0 mm'}</p>
+              <h3 className="text-gray-400 font-medium">Live Water Level</h3>
+              <p className="text-4xl font-bold text-white">{data?.waterLevel || '100 cm'}</p>
             </div>
             
           </div>
