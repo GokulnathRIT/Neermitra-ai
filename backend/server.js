@@ -24,13 +24,14 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 // =====================
 app.use('/api/auth',    authRoutes);
 app.use('/api/journal', require('./src/routes/journal'));
+app.use('/api/iot', require('./src/routes/iot'));
+app.use('/api/water', require('./src/routes/water')); // NEW WATER INTELLIGENCE ROUTE
 app.use('/api/advisor', require('./src/routes/api'));
 app.use('/api/reports', require('./src/routes/reports'));
 app.use('/api/crops',   require('./src/routes/crops'));
 app.use('/api/schemes', require('./src/routes/schemes'));
 app.use('/api/impact',  require('./src/routes/impact'));
 app.use('/api/payment', require('./src/routes/payment'));
-app.use('/api/iot',     require('./src/routes/iot'));
 
 // =====================
 // Root - API Overview

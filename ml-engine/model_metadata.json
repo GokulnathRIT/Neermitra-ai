@@ -1,0 +1,1 @@
+{"model_name": "Random Forest (Enterprise Big Data)", "model_version": "v3.0", "dataset_version": "synthetic_v3_1Million", "features": ["ph", "tds", "turbidity", "ec", "temperature", "nitrates", "do"], "accuracy": 0.933405}

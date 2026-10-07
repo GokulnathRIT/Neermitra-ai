@@ -14,6 +14,8 @@ import Lessons from './pages/Lessons';
 import B2BPortal from './pages/B2BPortal';
 import HouseFarming from './pages/HouseFarming';
 import Hardware from './pages/Hardware';
+import WaterIntelligence from './pages/WaterIntelligence';
+import PartnerLabs from './pages/PartnerLabs';
 
 import ScrollToTop from './components/ScrollToTop';
 import { Analytics } from '@vercel/analytics/react';
@@ -46,6 +48,8 @@ export default function App() {
             <Route path="/b2b"       element={<B2BPortal />}  />
             <Route path="/house-farming" element={<HouseFarming />} />
             <Route path="/hardware"  element={<Hardware />} />
+            <Route path="/water-intelligence" element={<WaterIntelligence />} />
+            <Route path="/labs" element={<PartnerLabs />} />
           </Routes>
         </main>
 

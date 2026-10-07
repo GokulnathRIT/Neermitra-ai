@@ -36,12 +36,7 @@ export default function DiseaseDetector() {
       return;
     }
     
-    // Hard Limit Check
-    if (usageCount >= 5) {
-      alert("Free limit reached! You have used your 5 free AI scans. Please upgrade to Premium for just ₹9/month.");
-      navigate('/pricing');
-      return;
-    }
+    // (Limits temporarily removed for presentation)
 
     setLoading(true);
     try {
@@ -101,7 +96,8 @@ export default function DiseaseDetector() {
       }
 
       // Call the REAL Gemini AI backend
-      const response = await fetch('https://neermitra-backend.onrender.com/api/crops/detect-disease', {
+      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/crops/detect-disease`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ imageBase64, symptoms })

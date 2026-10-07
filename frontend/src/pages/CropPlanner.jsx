@@ -31,12 +31,7 @@ export default function CropPlanner() {
       return;
     }
     
-    // Hard Limit Check
-    if (usageCount >= 5) {
-      alert("Free limit reached! You have used your 5 free AI crop plans. Please upgrade to Premium for just ₹9/month.");
-      navigate('/pricing');
-      return;
-    }
+    // (Limits temporarily removed for presentation)
 
     setError(''); setLoading(true);
     try {
