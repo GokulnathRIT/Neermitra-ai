@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import AIAdvisor from './pages/AIAdvisor';
 import Dashboard from './pages/Dashboard';
+import WeatherDashboard from './pages/Weather';
 import CropPlanner from './pages/CropPlanner';
 import Community from './pages/Community';
 import Schemes from './pages/Schemes';
@@ -36,6 +37,7 @@ export default function App() {
           <Routes>
             <Route path="/"          element={<Home />}       />
             <Route path="/advisor"   element={<AIAdvisor />}  />
+            <Route path="/weather"   element={<WeatherDashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/planner" element={<CropPlanner />} />
             <Route path="/doctor" element={<DiseaseDetector />} />

@@ -19,7 +19,7 @@ export default function Home() {
       color: 'from-blue-500 to-cyan-400',    
       title: t('dashboard') || 'Weather Dashboard', 
       desc: 'Live 3-day weather predictor and soil moisture tracking for your district.', 
-      to: '/dashboard' 
+      to: '/weather' 
     },
     { 
       Icon: Sprout,
