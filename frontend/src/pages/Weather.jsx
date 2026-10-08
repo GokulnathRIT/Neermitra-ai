@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+ï»¿import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, AreaChart, Area, Legend } from 'recharts';
 
 // District to Coordinates Mapping (Major Hubs)
@@ -111,7 +111,7 @@ export default function WeatherDashboard() {
         setForecastData(futureData);
 
         // Calculate a real Water Health Score based on live Soil Moisture and recent total rain
-        const currentSoilMoisture = data.current?.soil_moisture_0_to_7cm || 0; // Usually 0.0 to 1.0 (m-¦/m-¦)
+        const currentSoilMoisture = data.current?.soil_moisture_0_to_7cm || 0; // Usually 0.0 to 1.0 (m-Â¦/m-Â¦)
         const soilScore = currentSoilMoisture * 100; // Convert to percentage
         
         // Aggregate real Score
@@ -170,20 +170,20 @@ export default function WeatherDashboard() {
             }}
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors text-sm"
           >
-            G¼çn+Å Export CSV
+            GÂ¼Ã§n+Ã… Export CSV
           </button>
           <button 
             onClick={() => window.print()}
             className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2 transition-colors text-sm"
           >
-            =ƒû¿n+Å Export PDF
+            =Æ’Ã»Â¿n+Ã… Export PDF
           </button>
         </div>
       </div>
 
       {/* District Selector */}
       <div className="flex justify-center items-center gap-4">
-        <span className="text-gray-400 font-semibold">=ƒôì Select Region:</span>
+        <span className="text-gray-400 font-semibold">=Æ’Ã´Ã¬ Select Region:</span>
         <select value={district} onChange={(e) => setDistrict(e.target.value)}
           className="p-3 rounded-xl bg-slate-800 border border-white/20 text-white focus:outline-none focus:border-blue-400 shadow-xl font-bold">
           {districts.map(d => <option key={d} value={d}>{d}</option>)}
@@ -206,17 +206,17 @@ export default function WeatherDashboard() {
                   <p className="mt-1 text-lg">{waterHealth.message}</p>
                 </div>
                 <div className="space-y-2 text-sm">
-                  <div className="glass-card px-4 py-2">=ƒîºn+Å Rainfall: <strong>{waterHealth.rainfall}</strong></div>
-                  <div className="glass-card px-4 py-2">=ƒÅ£n+Å Drought Risk: <strong>{waterHealth.droughtRisk}</strong></div>
-                  <div className="glass-card px-4 py-2">=ƒôà Season: <strong>{waterHealth.season}</strong></div>
+                  <div className="glass-card px-4 py-2">=Æ’Ã®Âºn+Ã… Rainfall: <strong>{waterHealth.rainfall}</strong></div>
+                  <div className="glass-card px-4 py-2">=Æ’Ã…Â£n+Ã… Drought Risk: <strong>{waterHealth.droughtRisk}</strong></div>
+                  <div className="glass-card px-4 py-2">=Æ’Ã´Ã  Season: <strong>{waterHealth.season}</strong></div>
                 </div>
               </div>
               
               {/* Data Sources Badges */}
               <div className="flex flex-wrap gap-3 text-xs justify-center md:justify-end opacity-80">
-                <span className="px-3 py-1 glass-card border border-white/10 rounded-full flex items-center gap-1"><span className="text-blue-400">=ƒîÉ</span> Open-Meteo Live API</span>
-                <span className="px-3 py-1 glass-card border border-white/10 rounded-full flex items-center gap-1"><span className="text-green-400">=ƒôí</span> Historical Datasets</span>
-                <span className="px-3 py-1 glass-card border border-white/10 rounded-full flex items-center gap-1"><span className="text-yellow-400">=ƒºæGÇì=ƒî+</span> Ground Sensors</span>
+                <span className="px-3 py-1 glass-card border border-white/10 rounded-full flex items-center gap-1"><span className="text-blue-400">=Æ’Ã®Ã‰</span> Open-Meteo Live API</span>
+                <span className="px-3 py-1 glass-card border border-white/10 rounded-full flex items-center gap-1"><span className="text-green-400">=Æ’Ã´Ã­</span> Historical Datasets</span>
+                <span className="px-3 py-1 glass-card border border-white/10 rounded-full flex items-center gap-1"><span className="text-yellow-400">=Æ’ÂºÃ¦GÃ‡Ã¬=Æ’Ã®+</span> Ground Sensors</span>
               </div>
             </div>
           )}
@@ -224,7 +224,7 @@ export default function WeatherDashboard() {
           {/* 3-Day Weather Forecast Widget */}
           {forecastData.length > 0 && (
             <div className="glass-card p-6 border-t border-white/10 overflow-x-auto">
-              <h2 className="text-2xl font-bold mb-4 font-['Space_Grotesk'] text-blue-300">=ƒîªn+Å 7-Day Weather Forecast</h2>
+              <h2 className="text-2xl font-bold mb-4 font-['Space_Grotesk'] text-blue-300">=Æ’Ã®Âªn+Ã… 7-Day Weather Forecast</h2>
               <div className="flex gap-4 min-w-max pb-4">
                 {forecastData.map((day, idx) => (
                   <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col gap-2 items-center text-center w-40 flex-shrink-0">
@@ -237,7 +237,7 @@ export default function WeatherDashboard() {
                       </div>
                       <div className="flex justify-between w-full">
                         <span className="text-xs text-orange-400">Temp</span>
-                        <span className="font-bold text-sm">{day.maxTemp}-¦ / {day.minTemp}-¦</span>
+                        <span className="font-bold text-sm">{day.maxTemp}-Â¦ / {day.minTemp}-Â¦</span>
                       </div>
                     </div>
                   </div>
@@ -249,7 +249,7 @@ export default function WeatherDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Rainfall Chart */}
             <div className="glass-card p-6" style={{height: '360px'}}>
-              <h2 className="text-xl font-bold mb-4">=ƒôè 30-Day Rainfall History (mm)</h2>
+              <h2 className="text-xl font-bold mb-4">=Æ’Ã´Ã¨ 30-Day Rainfall History (mm)</h2>
               <ResponsiveContainer width="100%" height="85%">
                 <BarChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff22" />
@@ -263,7 +263,7 @@ export default function WeatherDashboard() {
 
             {/* Water Health Trend */}
             <div className="glass-card p-6" style={{height: '360px'}}>
-              <h2 className="text-xl font-bold mb-4">=ƒÆº 30-Day Soil Health Est.</h2>
+              <h2 className="text-xl font-bold mb-4">=Æ’Ã†Âº 30-Day Soil Health Est.</h2>
               <ResponsiveContainer width="100%" height="85%">
                 <AreaChart data={chartData}>
                   <defs>
@@ -284,7 +284,7 @@ export default function WeatherDashboard() {
 
           {/* Interactive Charts Area */}
           <div className="glass-card p-6" style={{height: '400px'}}>
-            <h2 className="text-xl font-bold mb-4">=ƒôê Combined Live Timeline</h2>
+            <h2 className="text-xl font-bold mb-4">=Æ’Ã´Ãª Combined Live Timeline</h2>
             <ResponsiveContainer width="100%" height="85%">
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff22" />
